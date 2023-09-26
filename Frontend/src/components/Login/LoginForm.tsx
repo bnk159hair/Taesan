@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-
+import { useUserStore } from 'store/UserStore';
+import { postLogin } from 'api/member';
 import { Card, Input, Checkbox, Button, Typography } from '@material-tailwind/react';
+import axios from 'axios';
 
 interface FormProps {
   loginId: string;
@@ -17,6 +19,7 @@ const schema = yup.object().shape({
 });
 
 const LoginForm = () => {
+  const { setAccessToken, setRefreshToken,setConnectedAsset } = useUserStore();
   const navigate = useNavigate();
 
   const {
@@ -26,14 +29,47 @@ const LoginForm = () => {
   } = useForm<FormProps>({ resolver: yupResolver(schema) });
 
   const onSubmit = (data: FormProps) => {
-    console.log(data);
+    // postLogin을 불러와서 id랑 password를 넘겨주고,
+    // postLogin(data.loginId, data.password)
+    //   //받아온 accessToken과 refreshToken을 store에 저장해줍니다.
+    //   .then((res) => {
+    //     setAccessToken(res.data.response.accessToken);
+    //     setRefreshToken(res.data.response.refreshToken);
+    //     console.log(res.data);
+    //     console.log(res.data.response.accessToken);
+    //     navigate('/main');  
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     console.log(data.loginId, data.password)
+    //   });
+    // console.log('폼데이터', data);
+    axios.post("https://j9c211.p.ssafy.io/api/member-management/members/login",
+    {
+      "loginId": data.loginId,
+      "password": data.password
+      })
+      .then((res) => {
+        console.log(res.data);
+        console.log(res.data.response.accessToken);
+        console.log(res.data.response.refreshToken);
+        setAccessToken(res.data.response.accessToken);
+        setRefreshToken(res.data.response.refreshToken);
+        // 지워야할 부분 ( 테스트를 위한 코드 )
+        setConnectedAsset(false);
+        navigate('/main');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
   };
 
   return (
     <div>
-      <Card color="transparent" shadow={false} className="h-screen flex justify-center items-center">
+      <Card color="transparent" shadow={false} className="flex justify-center items-center">
         <div>
-          <img src="/Main/Logo.png" className="h-36" alt="" />
+          <img src="/Main/logo.png" className="dt:h-36 tb:h-36 h-28" alt="" />
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
           <div className="flex flex-col mb-4 gap-6">
@@ -42,7 +78,7 @@ const LoginForm = () => {
               {errors.loginId && <p className="font-thin text-sm">{errors.loginId.message}</p>}
             </div>
             <div>
-              <Input size="lg" label="비밀번호" crossOrigin="anonymous" {...register('password')} />
+              <Input size="lg" label="비밀번호" crossOrigin="anonymous" {...register('password')} type="password" />
               {errors.password && <p className="font-thin text-sm">{errors.password.message}</p>}
             </div>
           </div>

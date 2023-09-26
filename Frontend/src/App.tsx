@@ -35,10 +35,12 @@ import SavingDetailPage from 'pages/SavingPage/SavingDetailPage';
 import SavingCreatePage from 'pages/SavingPage/SavingCreatePage';
 import SavingDeletePage from 'pages/SavingPage/SavingDeletePage';
 import TestPage from 'pages/TestPage/TestPage';
+import ApproveMyData from 'pages/MainPage/ApproveMyData';
+
 import './App.css';
 function App() {
   return (
-    <div className="App  flex justify-center bg-back ">
+    <div className="App  flex justify-center bg-back overflow-y-auto h-screen">
       <div className="w-screen tb:w-[60vw] dt:w-[50vw] border">
         <Routes>
           <Route path="/test" element={<TestPage />} />
@@ -54,7 +56,7 @@ function App() {
           {/* 절약 챌린지 관련 페이지 */}
           <Route path="/challenge" element={<ChallengePage />} />
           <Route path="/challenge/result" element={<ChallengeResultPage />} />
-          <Route path="/challenge/result/detail" element={<ChallengeResultDetailPage />} />
+          <Route path="/challenge/result/:id" element={<ChallengeResultDetailPage />} />
           <Route path="/challenge/create" element={<ChallengeCreatePage />} />
           <Route path="/challenge/play" element={<ChallengePlayPage />} />
           <Route path="/challenge/recruit" element={<ChallengeRecruitPage />} />
@@ -72,6 +74,7 @@ function App() {
           {/* 메인페이지 관련 페이지 */}
           <Route path="/main" element={<MainPage />} />
           <Route path="/main/asset/register" element={<AssetRegisterPage />} />
+          <Route path="/main/mydata" element={<ApproveMyData />} />
 
           {/* 마이페이지 관련 페이지 */}
           <Route path="/mypage" element={<MyPage />} />
@@ -94,8 +97,6 @@ function App() {
           <Route path="/saving/detail" element={<SavingDetailPage />} />
           <Route path="/saving/create" element={<SavingCreatePage />} />
           <Route path="/saving/delete" element={<SavingDeletePage />} />
-
-        
         </Routes>
       </div>
     </div>
