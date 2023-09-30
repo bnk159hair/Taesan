@@ -1,10 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
+import ArrowBack from 'components/Common/ArrowBack';
+import BottomNav from 'components/Common/BottomNav';
+import { screen } from '@testing-library/react';
+
 const SavingInfo = () => {
   const navigate = useNavigate();
   return (
-    <div className="bg-back">
+    <div className="h-screen">
+      <ArrowBack pageName="내 적금통" />
       <div className="flex justify-end mr-5">
         <Button
           color="blue"
@@ -23,11 +28,11 @@ const SavingInfo = () => {
       </div>
       <div className="flex flex-col items-center gap-4">
         <div className="text-lg text-gray-500">현재 적금통에 적립된 금액</div>
-        <div className="text-lg text-main font-bold">56,000원</div>
+        <div className="text-lg text-main font-bold">$NowSavingMoney</div>
         <div className="text-lg text-gray-500">만기까지 남은 일자 : </div>
-        <div className="text-lg text-main font-bold">87일(2023-12-25)</div>{' '}
+        <div className="text-lg text-main font-bold">$duration일($today)</div>{' '}
         <div className="text-lg text-gray-500">만기시 예상 출금액</div>
-        <div className="text-lg text-main font-bold">56,712원</div>
+        <div className="text-lg text-main font-bold">$fullMoney</div>
         <div>
           <Button
             color="red"
@@ -49,6 +54,7 @@ const SavingInfo = () => {
           </Button>
         </div>
       </div>
+      <BottomNav />
     </div>
   );
 };
