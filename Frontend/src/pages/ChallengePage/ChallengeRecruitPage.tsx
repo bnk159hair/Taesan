@@ -14,6 +14,7 @@ import { useUserStore } from 'store/UserStore';
 
 import dayjs from 'dayjs';
 import { useQuery } from 'react-query';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const ChallengeRecruitPage = () => {
   const navigate = useNavigate();
@@ -25,25 +26,29 @@ const ChallengeRecruitPage = () => {
   const [period, setPeriod] = useState('');
   const [players, setPlayers] = useState([]);
   const [creator, setCreator] = useState(false);
-  const { accessToken, refreshToken,connectedAsset,createdTikkle } = useUserStore();
-  const tokenCheck = ()=>{
-    axios.post('https://j9c211.p.ssafy.io/api/member-management/members/check/access-token',{},{
-      headers: {
-        'ACCESS-TOKEN': accessToken,
-        'REFRESH-TOKEN': refreshToken,
-      },
-    })
-    .then((res)=>{
-  
-      if(res.data.response === false){
-        navigate('/')
-      }
-    })
-    .catch((err)=>{
-      console.log(err)
-      navigate('/')
-    })
-  }
+  const { accessToken, refreshToken, connectedAsset, createdTikkle } = useUserStore();
+  const tokenCheck = () => {
+    axios
+      .post(
+        '/api/member-management/members/check/access-token',
+        {},
+        {
+          headers: {
+            'ACCESS-TOKEN': accessToken,
+            'REFRESH-TOKEN': refreshToken,
+          },
+        },
+      )
+      .then((res) => {
+        if (res.data.response === false) {
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        navigate('/');
+      });
+  };
   useEffect(() => {
     tokenCheck();
     if (connectedAsset === false || createdTikkle === false) {
@@ -55,7 +60,7 @@ const ChallengeRecruitPage = () => {
   console.log('챌린지아이디', challengeId);
 
   const fetchPlayersData = async () => {
-    const response = await axios.get(`https://j9c211.p.ssafy.io/api/challenge-management/challenges/state`, {
+    const response = await axios.get(`/api/challenge-management/challenges/state`, {
       headers: {
         'ACCESS-TOKEN': accessToken,
         'REFRESH-TOKEN': refreshToken,
@@ -65,15 +70,12 @@ const ChallengeRecruitPage = () => {
     const chID = response.data.response.challengeId;
     setChallengeId(response.data.response.challengeId);
     setChallengeState(response.data.response.state);
-    const challengeResponse = await axios.get(
-      `https://j9c211.p.ssafy.io/api/challenge-management/challenges/recruit/${chID}`,
-      {
-        headers: {
-          'ACCESS-TOKEN': accessToken,
-          'REFRESH-TOKEN': refreshToken,
-        },
+    const challengeResponse = await axios.get(`/api/challenge-management/challenges/recruit/${chID}`, {
+      headers: {
+        'ACCESS-TOKEN': accessToken,
+        'REFRESH-TOKEN': refreshToken,
       },
-    );
+    });
 
     if (challengeState === 2) {
       navigate('/challenge/play');
@@ -95,9 +97,6 @@ const ChallengeRecruitPage = () => {
       setTitle(challengeData.title);
       setPrice(challengeData.price);
 
-      // const today = dayjs(); // 오늘 날짜
-      // const targetDate = dayjs(challengeData.endDate); // 만기일
-      // const duration = targetDate.diff(today, 'day') + 1;
       setPeriod(challengeData.period);
 
       setRoomcode(challengeData.uuid);
@@ -131,7 +130,7 @@ const ChallengeRecruitPage = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://j9c211.p.ssafy.io/api/challenge-management/challenges/start/${challengeId}`,
+            `/api/challenge-management/challenges/start/${challengeId}`,
             {},
             {
               headers: {
@@ -171,7 +170,7 @@ const ChallengeRecruitPage = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://j9c211.p.ssafy.io/api/challenge-management/challenges/exit/${challengeId}`,
+            `/api/challenge-management/challenges/exit/${challengeId}`,
             {},
             {
               headers: {
@@ -210,7 +209,7 @@ const ChallengeRecruitPage = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`https://j9c211.p.ssafy.io/api/challenge-management/challenges/${challengeId}`, {
+          .delete(`/api/challenge-management/challenges/${challengeId}`, {
             headers: {
               'ACCESS-TOKEN': accessToken,
               'REFRESH-TOKEN': refreshToken,

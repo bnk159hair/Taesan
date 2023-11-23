@@ -3,6 +3,7 @@ import { NavigateFunction } from 'react-router-dom';
 import { get } from 'http';
 
 import axios from 'axios';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 interface PushItem {
   id: string;
@@ -363,7 +364,7 @@ const Notification = async ({
 
         // 절약 챌린지 조회 후 필터링
         try {
-          const res = await axios.get(`https://j9c211.p.ssafy.io/api/challenge-management/challenges/state`, {
+          const res = await axios.get(`/api/challenge-management/challenges/state`, {
             headers: {
               'ACCESS-TOKEN': accessToken,
               'REFRESH-TOKEN': refreshToken,
@@ -373,7 +374,7 @@ const Notification = async ({
           if (res.data.response.state === 0 && pushItem.id === 'challengeCreate') {
             shouldInclude = true;
           } else if (res.data.response.state === 1 && pushItem.id === 'challengeRecruit') {
-            const response = await axios.get(`https://j9c211.p.ssafy.io/api/challenge-management/challenges/state`, {
+            const response = await axios.get(`/api/challenge-management/challenges/state`, {
               headers: {
                 'ACCESS-TOKEN': accessToken,
                 'REFRESH-TOKEN': refreshToken,
@@ -381,20 +382,17 @@ const Notification = async ({
             });
 
             const chID = response.data.response.challengeId;
-            const recruitResponse = await axios.get(
-              `https://j9c211.p.ssafy.io/api/challenge-management/challenges/recruit/${chID}`,
-              {
-                headers: {
-                  'ACCESS-TOKEN': accessToken,
-                  'REFRESH-TOKEN': refreshToken,
-                },
+            const recruitResponse = await axios.get(`/api/challenge-management/challenges/recruit/${chID}`, {
+              headers: {
+                'ACCESS-TOKEN': accessToken,
+                'REFRESH-TOKEN': refreshToken,
               },
-            );
+            });
 
             pushItem.info = recruitResponse.data.response.participantNames.length;
             shouldInclude = true;
           } else if (res.data.response.state === 2 && pushItem.id === 'challengePlay') {
-            const response = await axios.get(`https://j9c211.p.ssafy.io/api/challenge-management/challenges/state`, {
+            const response = await axios.get(`/api/challenge-management/challenges/state`, {
               headers: {
                 'ACCESS-TOKEN': accessToken,
                 'REFRESH-TOKEN': refreshToken,
@@ -402,15 +400,12 @@ const Notification = async ({
             });
 
             const chID = response.data.response.challengeId;
-            const progressResponse = await axios.get(
-              `https://j9c211.p.ssafy.io/api/challenge-management/challenges/progress/${chID}`,
-              {
-                headers: {
-                  'ACCESS-TOKEN': accessToken,
-                  'REFRESH-TOKEN': refreshToken,
-                },
+            const progressResponse = await axios.get(`/api/challenge-management/challenges/progress/${chID}`, {
+              headers: {
+                'ACCESS-TOKEN': accessToken,
+                'REFRESH-TOKEN': refreshToken,
               },
-            );
+            });
 
             pushItem.info = progressResponse.data.response.spare;
             shouldInclude = true;
@@ -423,7 +418,7 @@ const Notification = async ({
         if (pushItem.id === 'EnrollRecipt') {
           try {
             // 해당 카드 거래 내역 불러오기
-            const response = await axios.get(`https://j9c211.p.ssafy.io/api/transactions/history/${selectedCardId}`, {
+            const response = await axios.get(`/api/transactions/history/${selectedCardId}`, {
               params: {
                 cursor: null,
                 limit: 10,
@@ -438,7 +433,7 @@ const Notification = async ({
             const DTOList = response.data.response.transactionDTOList[0];
             // 가장 최근 거래 상세내역 불러오기
             await axios
-              .get(`https://j9c211.p.ssafy.io/api/transactions/${DTOList.transactionId}/receipt/`, {
+              .get(`/api/transactions/${DTOList.transactionId}/receipt/`, {
                 headers: {
                   'ACCESS-TOKEN': accessToken,
                   'REFRESH-TOKEN': refreshToken,
@@ -463,7 +458,7 @@ const Notification = async ({
         // 습관 저금 등록 가능 여부 조회 후 true 필터
         if (pushItem.id === 'EnrollHabit') {
           await axios
-            .get(`https://j9c211.p.ssafy.io/api/habit-management/habits/today`, {
+            .get(`/api/habit-management/habits/today`, {
               headers: {
                 'ACCESS-TOKEN': accessToken,
                 'REFRESH-TOKEN': refreshToken,
@@ -485,7 +480,7 @@ const Notification = async ({
         if (pushItem.id === 'SavingDuration') {
           const today = new Date();
           try {
-            const response = await axios.get('https://j9c211.p.ssafy.io/api/asset-management/tikkle/', {
+            const response = await axios.get('/api/asset-management/tikkle/', {
               headers: {
                 'ACCESS-TOKEN': accessToken,
                 'REFRESH-TOKEN': refreshToken,

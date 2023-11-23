@@ -11,6 +11,7 @@ import Notification from 'components/Common/Notification';
 import { useNavigate } from 'react-router';
 import Loading from 'components/Common/Loading';
 import { useAssetStore } from 'store/AssetStore';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -69,7 +70,7 @@ const MainPage = () => {
   const tokenCheck = () => {
     axios
       .post(
-        'https://j9c211.p.ssafy.io/api/member-management/members/check/access-token',
+        '/api/member-management/members/check/access-token',
         {},
         {
           headers: {
@@ -94,7 +95,7 @@ const MainPage = () => {
   // useQuery를 이용해 사용자 정보 호출 ( 2개의 쿼리 사용 )
   // 쿼리 1
   const getInfo = async () => {
-    const { data: userProfileInfo } = await axios.get('https://j9c211.p.ssafy.io/api/member-management/members/info', {
+    const { data: userProfileInfo } = await axios.get('/api/member-management/members/info', {
       headers: {
         'ACCESS-TOKEN': accessToken,
         'REFRESH-TOKEN': refreshToken,
@@ -106,7 +107,7 @@ const MainPage = () => {
 
   // 쿼리 2 ( API )
   const getAsset = async () => {
-    const { data: userAssetInfo } = await axios.get('https://j9c211.p.ssafy.io/api/asset-management/assets/main', {
+    const { data: userAssetInfo } = await axios.get('/api/asset-management/assets/main', {
       headers: {
         'ACCESS-TOKEN': accessToken,
         'REFRESH-TOKEN': refreshToken,

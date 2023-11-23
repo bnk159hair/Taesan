@@ -18,6 +18,7 @@ import { Toast } from 'components/Common/Toast';
 
 import axios from 'axios';
 import { useUserStore } from 'store/UserStore';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const MyPageList = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const MyPageList = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .get(`https://j9c211.p.ssafy.io/api/member-management/members/logout`, {
+          .get(`/api/member-management/members/logout`, {
             headers: {
               'ACCESS-TOKEN': accessToken,
               'REFRESH-TOKEN': refreshToken,

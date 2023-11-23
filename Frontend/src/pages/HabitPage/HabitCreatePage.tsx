@@ -20,6 +20,8 @@ import Swal2 from 'sweetalert2';
 import ArrowBack from 'components/Common/ArrowBack';
 import BottomNav from 'components/Common/BottomNav';
 import { useUserStore } from 'store/UserStore';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+
 const HabitCreatePage = () => {
   const { accessToken, refreshToken, connectedAsset, createdTikkle, name } = useUserStore();
   const navigate = useNavigate();
@@ -54,7 +56,7 @@ const HabitCreatePage = () => {
   const tokenCheck = () => {
     axios
       .post(
-        'https://j9c211.p.ssafy.io/api/member-management/members/check/access-token',
+        '/api/member-management/members/check/access-token',
         {},
         {
           headers: {
@@ -102,7 +104,7 @@ const HabitCreatePage = () => {
 
   useEffect(() => {
     axios
-      .get('https://j9c211.p.ssafy.io/api/transactions/oftenTransaction', {
+      .get('/api/transactions/oftenTransaction', {
         headers: {
           'ACCESS-TOKEN': accessToken,
           'REFRESH-TOKEN': refreshToken,
@@ -136,7 +138,7 @@ const HabitCreatePage = () => {
     }
     axios
       .post(
-        'https://j9c211.p.ssafy.io/api/habit-management/habits',
+        '/api/habit-management/habits',
         {
           title: title,
           habitName: habit,

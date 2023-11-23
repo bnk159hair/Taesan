@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AccountRegister from 'components/AssetRegister/AccountRegister';
 import CardRegister from 'components/AssetRegister/CardRegister';
 import { Button } from '@material-tailwind/react';
@@ -7,33 +7,37 @@ import axios from 'axios';
 import { useUserStore } from 'store/UserStore';
 import Swal2 from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const AssetRegisterPage = () => {
   const navigate = useNavigate();
   const [nextButton, setNextButton] = useState(false);
-  const { accessToken, refreshToken, userId, setConnectedAsset,connectedAsset,createdTikkle } = useUserStore();
+  const { accessToken, refreshToken, userId, setConnectedAsset, connectedAsset, createdTikkle } = useUserStore();
   const [account, setAccount] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
- 
 
-  const tokenCheck = ()=>{
-    axios.post('https://j9c211.p.ssafy.io/api/member-management/members/check/access-token',{},{
-      headers: {
-        'ACCESS-TOKEN': accessToken,
-        'REFRESH-TOKEN': refreshToken,
-      },
-    })
-    .then((res)=>{
-   
-      if(res.data.response === false){
-        navigate('/')
-      }
-    })
-    .catch((err)=>{
-      console.log(err)
-      navigate('/')
-    })
-  }
+  const tokenCheck = () => {
+    axios
+      .post(
+        '/api/member-management/members/check/access-token',
+        {},
+        {
+          headers: {
+            'ACCESS-TOKEN': accessToken,
+            'REFRESH-TOKEN': refreshToken,
+          },
+        },
+      )
+      .then((res) => {
+        if (res.data.response === false) {
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        navigate('/');
+      });
+  };
   useEffect(() => {
     tokenCheck();
   }, []);
@@ -41,28 +45,12 @@ const AssetRegisterPage = () => {
   // useQuery를 이용해 계좌 정보 호출
 
   const getAccountList = async () => {
-    const { data: accountList } = await axios.get(
-      'https://j9c211.p.ssafy.io/api/asset-management/assets/account/list',
-      {
-        // headers: {
-        //   'user-ci': userId,
-
-        //   'x-api-tran-id': '1234567890M00000000000001',
-        //   'x-api-type': 'user-search',
-        // },
-        // params: {
-        //   org_code: 'ssafy00001',
-        //   search_timestamp: Date.now(),
-        //   next_page: 0,
-        //   limit: 500,
-        // },
-
-        headers: {
-          'ACCESS-TOKEN': accessToken,
-          'REFRESH-TOKEN': refreshToken,
-        },
+    const { data: accountList } = await axios.get('/api/asset-management/assets/account/list', {
+      headers: {
+        'ACCESS-TOKEN': accessToken,
+        'REFRESH-TOKEN': refreshToken,
       },
-    );
+    });
     console.log(accountList);
     return accountList;
   };
@@ -70,19 +58,7 @@ const AssetRegisterPage = () => {
 
   // useQuery를 이용해 카드 정보 호출
   const getCardList = async () => {
-    const { data: cardList } = await axios.get('https://j9c211.p.ssafy.io/api/asset-management/assets/card/list', {
-      // headers: {
-      //   // 거래고유번호, api 유형
-      //   'user-ci': userId,
-      //   'x-api-tran-id': '1234567890M00000000000001',
-      //   'x-api-type': 'user-search',
-      // },
-      // params: {
-      //   org_code: 'ssafy00001',
-      //   search_timestamp: Date.now(),
-      //   next_page: 0,
-      //   limit: 500,
-      // },
+    const { data: cardList } = await axios.get('/api/asset-management/assets/card/list', {
       headers: {
         'ACCESS-TOKEN': accessToken,
         'REFRESH-TOKEN': refreshToken,
@@ -96,7 +72,7 @@ const AssetRegisterPage = () => {
     // 자산 등록 API
     axios
       .post(
-        'https://j9c211.p.ssafy.io/api/member-management/members/account',
+        '/api/member-management/members/account',
 
         { account: account },
         {

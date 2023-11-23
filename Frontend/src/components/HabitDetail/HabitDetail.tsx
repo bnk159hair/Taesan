@@ -16,6 +16,8 @@ import ArrowBack from 'components/Common/ArrowBack';
 import { useUserStore } from 'store/UserStore';
 import { useParams } from 'react-router-dom';
 import Swal2 from 'sweetalert2';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+
 const HabitDetail = () => {
   const { habitId } = useParams<{ habitId: string }>();
   const { accessToken, refreshToken } = useUserStore();
@@ -50,7 +52,7 @@ const HabitDetail = () => {
   const stopHabit = () => {
     axios
       .put(
-        `https://j9c211.p.ssafy.io/api/habit-management/habits/progress/${habitId}`,
+        `/api/habit-management/habits/progress/${habitId}`,
         {
           // 여기에 객체 속성과 값을 추가하세요
         },
@@ -86,7 +88,7 @@ const HabitDetail = () => {
     const month = dayjs().month() + 1;
     const day = dayjs().day();
     axios
-      .get(`https://j9c211.p.ssafy.io/api/habit-management/habits/${habitId}/calendars/${year}/${month}`, {
+      .get(`/api/habit-management/habits/${habitId}/calendars/${year}/${month}`, {
         headers: {
           'ACCESS-TOKEN': accessToken,
           'REFRESH-TOKEN': refreshToken,
@@ -102,7 +104,7 @@ const HabitDetail = () => {
       });
     //////////
     axios
-      .get(`https://j9c211.p.ssafy.io/api/habit-management/habits/${habitId}`, {
+      .get(`/api/habit-management/habits/${habitId}`, {
         headers: {
           'ACCESS-TOKEN': accessToken,
           'REFRESH-TOKEN': refreshToken,
@@ -165,7 +167,7 @@ const HabitDetail = () => {
     const month = value.format('MM');
 
     axios
-      .get(`https:/j9c211.p.ssafy.io/api/habit-management/habits/total-calendar/${year}/${month}`, {
+      .get(`/api/habit-management/habits/total-calendar/${year}/${month}`, {
         headers: {
           'ACCESS-TOKEN': accessToken,
           'REFRESH-TOKEN': refreshToken,

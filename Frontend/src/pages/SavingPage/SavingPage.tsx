@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useQuery } from 'react-query';
 import { useUserStore } from 'store/UserStore';
 import { useNavigate } from 'react-router-dom';
-
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 const SavingPage = () => {
   const [savingInfo, setSavingInfo] = useState([]);
 
@@ -13,7 +13,7 @@ const SavingPage = () => {
   const tokenCheck = () => {
     axios
       .post(
-        'https://j9c211.p.ssafy.io/api/member-management/members/check/access-token',
+        '/api/member-management/members/check/access-token',
         {},
         {
           headers: {
@@ -40,7 +40,7 @@ const SavingPage = () => {
   }, []);
   // 쿼리 1
   const getSavingInfo = async () => {
-    const { data: savingTikkleInfo } = await axios.get('https://j9c211.p.ssafy.io/api/asset-management/tikkle/', {
+    const { data: savingTikkleInfo } = await axios.get('/api/asset-management/tikkle/', {
       headers: {
         'ACCESS-TOKEN': accessToken,
         'REFRESH-TOKEN': refreshToken,

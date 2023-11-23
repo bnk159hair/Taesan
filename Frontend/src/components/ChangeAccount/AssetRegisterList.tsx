@@ -7,6 +7,7 @@ import Swal2 from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import AccountRegister from './AccountRegister';
 import CardRegister from './CardRegister';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const AssetRegisterList = ({ accountNumber }: { accountNumber: string }) => {
   const navigate = useNavigate();
@@ -18,28 +19,25 @@ const AssetRegisterList = ({ accountNumber }: { accountNumber: string }) => {
   // useQuery를 이용해 계좌 정보 호출
 
   const getAccountList = async () => {
-    const { data: accountList } = await axios.get(
-      'https://j9c211.p.ssafy.io/api/asset-management/assets/account/list',
-      {
-        // headers: {
-        //   'user-ci': userId,
+    const { data: accountList } = await axios.get('/api/asset-management/assets/account/list', {
+      // headers: {
+      //   'user-ci': userId,
 
-        //   'x-api-tran-id': '1234567890M00000000000001',
-        //   'x-api-type': 'user-search',
-        // },
-        // params: {
-        //   org_code: 'ssafy00001',
-        //   search_timestamp: Date.now(),
-        //   next_page: 0,
-        //   limit: 500,
-        // },
+      //   'x-api-tran-id': '1234567890M00000000000001',
+      //   'x-api-type': 'user-search',
+      // },
+      // params: {
+      //   org_code: 'ssafy00001',
+      //   search_timestamp: Date.now(),
+      //   next_page: 0,
+      //   limit: 500,
+      // },
 
-        headers: {
-          'ACCESS-TOKEN': accessToken,
-          'REFRESH-TOKEN': refreshToken,
-        },
+      headers: {
+        'ACCESS-TOKEN': accessToken,
+        'REFRESH-TOKEN': refreshToken,
       },
-    );
+    });
     console.log(accountList);
     return accountList;
   };
@@ -47,7 +45,7 @@ const AssetRegisterList = ({ accountNumber }: { accountNumber: string }) => {
 
   // useQuery를 이용해 카드 정보 호출
   const getCardList = async () => {
-    const { data: cardList } = await axios.get('https://j9c211.p.ssafy.io/api/asset-management/assets/card/list', {
+    const { data: cardList } = await axios.get('/api/asset-management/assets/card/list', {
       // headers: {
       //   // 거래고유번호, api 유형
       //   'user-ci': userId,
@@ -73,7 +71,7 @@ const AssetRegisterList = ({ accountNumber }: { accountNumber: string }) => {
     // 자산 등록 API
     axios
       .post(
-        'https://j9c211.p.ssafy.io/api/member-management/members/account',
+        '/api/member-management/members/account',
 
         { account: account },
         {

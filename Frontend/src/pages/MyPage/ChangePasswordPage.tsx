@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PasswordForm from 'components/ChangePassword/PasswordForm';
 import ArrowBack from 'components/Common/ArrowBack';
 import BottomNav from 'components/Common/BottomNav';
@@ -9,6 +9,7 @@ import { Toast } from 'components/Common/Toast';
 
 import axios from 'axios';
 import { useUserStore } from 'store/UserStore';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const ChangePasswordPage = () => {
   const { accessToken, refreshToken } = useUserStore();
@@ -18,24 +19,28 @@ const ChangePasswordPage = () => {
     newPasswordConfirm: '',
   });
   const navigate = useNavigate();
-  const tokenCheck = ()=>{
-    axios.post('https://j9c211.p.ssafy.io/api/member-management/members/check/access-token',{},{
-      headers: {
-        'ACCESS-TOKEN': accessToken,
-        'REFRESH-TOKEN': refreshToken,
-      },
-    })
-    .then((res)=>{
-
-      if(res.data.response === false){
-        navigate('/')
-      }
-    })
-    .catch((err)=>{
-      console.log(err)
-      navigate('/')
-    })
-  }
+  const tokenCheck = () => {
+    axios
+      .post(
+        '/api/member-management/members/check/access-token',
+        {},
+        {
+          headers: {
+            'ACCESS-TOKEN': accessToken,
+            'REFRESH-TOKEN': refreshToken,
+          },
+        },
+      )
+      .then((res) => {
+        if (res.data.response === false) {
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        navigate('/');
+      });
+  };
   useEffect(() => {
     tokenCheck();
   }, []);
@@ -45,7 +50,7 @@ const ChangePasswordPage = () => {
     if (form.password && form.newPassword && form.newPasswordConfirm && form.newPassword === form.newPasswordConfirm) {
       axios
         .post(
-          `https://j9c211.p.ssafy.io/api/auth-management/auths/password/check`,
+          `/api/auth-management/auths/password/check`,
           {
             password: form.password,
           },
@@ -64,7 +69,7 @@ const ChangePasswordPage = () => {
             setErrorMessage('');
             axios
               .put(
-                `https://j9c211.p.ssafy.io/api/member-management/members/password`,
+                `/api/member-management/members/password`,
                 {
                   password: form.newPassword, // 새로운 비밀번호로 업데이트
                 },

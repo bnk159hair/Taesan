@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BuyifList from 'components/BuyIf/BuyifList';
 import AssetCard from 'components/BuyIf/AssetCard';
@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useQuery } from 'react-query';
 import { useUserStore } from 'store/UserStore';
 import { response } from 'express';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const BuyIfPage = () => {
   const navigate = useNavigate();
@@ -18,26 +19,30 @@ const BuyIfPage = () => {
   const [tikkle, setTikkle] = useState(0);
   const [mostBuy, setMostBuy] = useState('');
   const [mostBuyPrice, setMostBuyPrice] = useState(0);
-  const { accessToken, refreshToken,connectedAsset,createdTikkle } = useUserStore();
+  const { accessToken, refreshToken, connectedAsset, createdTikkle } = useUserStore();
 
-  const tokenCheck = ()=>{
-    axios.post('https://j9c211.p.ssafy.io/api/member-management/members/check/access-token',{},{
-      headers: {
-        'ACCESS-TOKEN': accessToken,
-        'REFRESH-TOKEN': refreshToken,
-      },
-    })
-    .then((res)=>{
-    
-      if(res.data.response === false){
-        navigate('/')
-      }
-    })
-    .catch((err)=>{
-      console.log(err)
-      navigate('/')
-    })
-  }
+  const tokenCheck = () => {
+    axios
+      .post(
+        '/api/member-management/members/check/access-token',
+        {},
+        {
+          headers: {
+            'ACCESS-TOKEN': accessToken,
+            'REFRESH-TOKEN': refreshToken,
+          },
+        },
+      )
+      .then((res) => {
+        if (res.data.response === false) {
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        navigate('/');
+      });
+  };
   useEffect(() => {
     tokenCheck();
     if (connectedAsset === false || createdTikkle === false) {
@@ -45,7 +50,7 @@ const BuyIfPage = () => {
     }
   }, []);
   const getBuyif = async () => {
-    const { data } = await axios.get('https://j9c211.p.ssafy.io/api/ifbuy-management/ifbuys', {
+    const { data } = await axios.get('/api/ifbuy-management/ifbuys', {
       headers: {
         'ACCESS-TOKEN': accessToken,
         'REFRESH-TOKEN': refreshToken,
