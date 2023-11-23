@@ -1,5 +1,3 @@
-export const REACT_APP_URL = 'https://j9c211.p.ssafy.io';
-
 export const MEMBER = '/api/member-management/members';
 export const AUTH = '/api/auth-management/auths';
 export const ANALYST = '/api/analyst-management/analysts';
